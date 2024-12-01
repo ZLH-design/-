@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>学生管理系统</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    header {
+      background-color: #4CAF50;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      font-size: 24px;
+    }
+
+    /* 修改：小鸡图案放到页面右上角 */
+    .chicken {
+      position: fixed;  /* 使用fixed来让其固定在页面的某个位置 */
+      top: 20px;        /* 调整小鸡离页面顶部的距离 */
+      right: 20px;      /* 调整小鸡离页面右侧的距离 */
+      width: 150px;
+      height: 150px;
+      background-color: yellow;
+      border-radius: 50%;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+      z-index: 1;
+    }
+
+    .chicken .beak {
+      position: absolute;
+      top: 45%;
+      left: 20%;
+      width: 40px;
+      height: 20px;
+      background-color: orange;
+      clip-path: polygon(0 0, 100% 50%, 0 100%);
+      transform: rotate(45deg);
+    }
+
+    .chicken .eyes {
+      position: absolute;
+      top: 30%;
+      left: 30%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chicken .eyes .eye {
+      width: 12px;
+      height: 12px;
+      background-color: black;
+      border-radius: 50%;
+    }
+
+    .chicken .wings {
+      position: absolute;
+      top: 50%;
+      left: 10%;
+      width: 30px;
+      height: 30px;
+      background-color: yellow;
+      border-radius: 50%;
+      transform: rotate(45deg);
+    }
+
+    .chicken .wings.right {
+      left: 60%;
+      transform: rotate(-45deg);
+    }
+
+    footer {
+      background-color: #4CAF50;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      font-size: 14px;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+    }
+
+    /* 学生管理界面样式 */
+    .form-container {
+      background-color: #ffffff;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    input[type="text"], input[type="number"], select {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #student-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    #student-list li {
+      background-color: #ffffff;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #student-list li span {
+      font-size: 16px;
+    }
+
+    .gpa {
+      background-color: #f0f0f0;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    学生管理系统
+  </header>
+
+  <!-- 绘制小鸡，并将其放置在右上角 -->
+  <div class="chicken">
+    <div class="beak"></div>
+    <div class="eyes">
+      <div class="eye"></div>
+      <div class="eye"></div>
+    </div>
+    <div class="wings"></div>
+    <div class="wings right"></div>
+  </div>
+
+  <!-- 添加学生表单 -->
+  <div class="form-container">
+    <h2>添加学生</h2>
+    <input type="text" id="name" placeholder="学生姓名" />
+    <input type="number" id="age" placeholder="学生年龄" />
+    <select id="gender">
+      <option value="M">男</option>
+      <option value="F">女</option>
+    </select>
+    <button id="add-student-btn">添加学生</button>
+  </div>
+
+  <!-- 添加学生绩点表单 -->
+  <div class="form-container">
+    <h2>更新学生绩点</h2>
+    <input type="number" id="gpa-id" placeholder="学生ID" />
+    <input type="number" id="gpa" placeholder="学生绩点 (0-4)" min="0" max="4" step="0.1"/>
+    <button id="update-gpa-btn">更新绩点</button>
+  </div>
+
+  <!-- 更新学生表单 -->
+  <div class="form-container">
+    <h2>更新学生</h2>
+    <input type="number" id="update-id" placeholder="学生ID" />
+    <input type="text" id="update-name" placeholder="学生姓名" />
+    <input type="number" id="update-age" placeholder="学生年龄" />
+    <select id="update-gender">
+      <option value="M">男</option>
+      <option value="F">女</option>
+    </select>
+    <button id="update-student-btn">更新学生</button>
+  </div>
+
+  <!-- 删除学生表单 -->
+  <div class="form-container">
+    <h2>删除学生</h2>
+    <input type="number" id="delete-id" placeholder="学生ID" />
+    <button id="delete-student-btn">删除学生</button>
+  </div>
+
+  <!-- 学生列表 -->
+  <div class="form-container">
+    <h2>学生列表</h2>
+    <ul id="student-list"></ul>
+  </div>
+
+  <footer>
+    © 2024 学生管理系统
+  </footer>
+
+  <script src="aq.js"></script>
+</body>
+</html>
